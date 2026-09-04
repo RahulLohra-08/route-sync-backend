@@ -1,0 +1,225 @@
+# ============================================================
+# Maven
+# ============================================================
+
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Maven wrapper
+.mvn/wrapper/maven-wrapper.jar
+
+# ============================================================
+# Build output
+# ============================================================
+
+build/
+out/
+bin/
+
+# Keep source build directories if nested
+!**/src/main/**/build/
+!**/src/test/**/build/
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# ============================================================
+# Java compiled files
+# ============================================================
+
+*.class
+*.jar
+*.war
+*.ear
+
+# ============================================================
+# Logs
+# ============================================================
+
+*.log
+logs/
+*.log.*
+spring.log
+
+# ============================================================
+# Spring Boot
+# ============================================================
+
+spring-boot-devtools.properties
+
+# ============================================================
+# Environment / Secrets
+# ============================================================
+
+.env
+.env.*
+!.env.example
+
+*.env
+application-local.properties
+application-local.yml
+application-local.yaml
+
+# Secrets / credentials
+secrets/
+credentials/
+*.pem
+*.key
+*.p12
+*.jks
+*.keystore
+
+# ============================================================
+# IntelliJ IDEA
+# ============================================================
+
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# IntelliJ workspace
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/usage.statistics.xml
+.idea/dictionaries/
+.idea/shelf/
+
+# ============================================================
+# Eclipse / STS
+# ============================================================
+
+.classpath
+.project
+.settings/
+.springBeans
+.sts4-cache
+.apt_generated
+.factorypath
+
+# ============================================================
+# NetBeans
+# ============================================================
+
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# ============================================================
+# VS Code
+# ============================================================
+
+.vscode/
+
+# Keep VS Code extensions recommendations if you want
+!.vscode/extensions.json
+
+# ============================================================
+# OS generated files
+# ============================================================
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.directory
+
+# ============================================================
+# Temporary files
+# ============================================================
+
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+*.backup
+
+# ============================================================
+# Java / IDE generated
+# ============================================================
+
+rebel.xml
+.cache/
+.factorypath
+.project
+.settings/
+
+# ============================================================
+# Annotation processors
+# ============================================================
+
+generated/
+generated-sources/
+generated-test-sources/
+
+# ============================================================
+# Coverage / Testing
+# ============================================================
+
+coverage/
+jacoco/
+*.exec
+
+# ============================================================
+# Test reports
+# ============================================================
+
+surefire-reports/
+failsafe-reports/
+
+# ============================================================
+# Database local files
+# ============================================================
+
+*.db
+*.sqlite
+*.sqlite3
+
+# ============================================================
+# Docker
+# ============================================================
+
+docker-data/
+.docker/
+
+# ============================================================
+# Node / Frontend (if frontend exists inside project)
+# ============================================================
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ============================================================
+# Misc
+# ============================================================
+
+HELP.md
+.flattened-pom.xml
+release.properties
+dependency-reduced-pom.xml
+
+# Maven generated files
+pom.xml.releaseBackup
+
+# ============================================================
+# OS / IDE caches
+# ============================================================
+
+.cache/
+.temp/
+tmp/
