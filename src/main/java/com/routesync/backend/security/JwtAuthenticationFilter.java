@@ -36,8 +36,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
-        final String authHeader =
-                request.getHeader("Authorization");
+        System.out.println(
+                "JWT Filter: " +
+                        request.getMethod() +
+                        " " +
+                        request.getRequestURI()
+        );
+
+        final String authHeader = request.getHeader("Authorization");
 
         /*
          * Authorization header nahi hai ya Bearer token nahi hai
@@ -63,6 +69,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
              * Yahan directly 401 return nahi kar rahe.
              * Spring Security chain ko request process karne denge.
              */
+            System.out.println("JWT Extraction Error:");
+            exception.printStackTrace();
+
             filterChain.doFilter(request, response);
             return;
         }
@@ -78,8 +87,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             try {
 
-                UserDetails userDetails =
-                        userDetailsService.loadUserByUsername(username);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+                System.out.println(
+                        "Authenticated User: " +
+                                userDetails.getUsername()
+                );
+
+                System.out.println(
+                        "Authorities: " +
+                                userDetails.getAuthorities()
+                );
 
                 if (jwtService.isTokenValid(jwt, userDetails)) {
 
@@ -102,10 +120,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             } catch (Exception exception) {
 
-                /*
-                 * Invalid user/token hone par authentication set nahi hoga.
-                 * Protected endpoint ke case mein Spring Security 401 dega.
-                 */
+                System.out.println("JWT Authentication Error:");
+                exception.printStackTrace();
             }
         }
 

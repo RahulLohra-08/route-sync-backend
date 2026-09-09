@@ -32,6 +32,7 @@ public class BusController {
             @Valid @RequestBody CreateBusRequest request
     ) {
 
+        System.out.println("Request Controller: "+ request);
         BusResponse response = busService.createBus(request);
 
         return ResponseEntity

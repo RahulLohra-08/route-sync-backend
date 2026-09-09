@@ -5,7 +5,9 @@ import com.routesync.backend.dto.driver.DriverResponse;
 import com.routesync.backend.dto.driver.UpdateDriverRequest;
 import com.routesync.backend.entity.Driver;
 import com.routesync.backend.entity.User;
+import com.routesync.backend.entity.UserRole;
 import com.routesync.backend.entity.enums.DriverStatus;
+import com.routesync.backend.exception.BadRequestException;
 import com.routesync.backend.exception.ResourceAlreadyExistsException;
 import com.routesync.backend.exception.ResourceNotFoundException;
 import com.routesync.backend.repository.DriverRepository;
@@ -39,6 +41,12 @@ public class DriverServiceImpl implements DriverService {
                                 "User not found with id: " + request.userId()
                         )
                 );
+
+        if (user.getRole() != UserRole.DRIVER ) {
+            throw new BadRequestException(
+                    "User must have DRIVER role to create a driver profile"
+            );
+        }
 
         // Check whether user already has a driver profile
         if (driverRepository.existsByUserId(request.userId())) {
@@ -144,7 +152,7 @@ public class DriverServiceImpl implements DriverService {
     ) {
 
         Driver driver = driverRepository.findById(id)
-                .filter(Driver::getActive)
+                .filter(driver1 -> driver1.getActive())
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "Active driver not found with id: " + id

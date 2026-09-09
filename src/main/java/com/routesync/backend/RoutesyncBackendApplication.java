@@ -9,4 +9,3 @@ public class RoutesyncBackendApplication {
 		SpringApplication.run(RoutesyncBackendApplication.class, args);
 	}
 }
-

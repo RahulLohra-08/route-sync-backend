@@ -51,6 +51,7 @@ public class SecurityConfig {
                         /*
                          * ADMIN ONLY
                          */
+
                         .requestMatchers(
                                 "/api/v1/admin/**",
                                 "/api/v1/users",
@@ -58,10 +59,10 @@ public class SecurityConfig {
                                 "/api/v1/users/phone/**"
                         ).hasRole("ADMIN")
 
-                        /*
-                         * DRIVER + ADMIN
-                         */
-                        .requestMatchers("/api/v1/driver/**").hasAnyRole("DRIVER","ADMIN")
+
+                        // Driver APIs
+                        .requestMatchers("/api/v1/drivers/**")
+                        .authenticated()
 
                         /*
                          * PASSENGER + DRIVER + ADMIN
