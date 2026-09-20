@@ -33,7 +33,7 @@ public class Stop {
      */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
-            name = "route_code",
+            name = "route_id",
             nullable = false,
             foreignKey = @ForeignKey(
                     name = "fk_stops_route"
