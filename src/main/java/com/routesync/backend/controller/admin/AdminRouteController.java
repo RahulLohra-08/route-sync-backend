@@ -1,4 +1,4 @@
-package com.routesync.backend.controller;
+package com.routesync.backend.controller.admin;
 
 import com.routesync.backend.dto.route.CreateRouteRequest;
 import com.routesync.backend.dto.route.RouteResponse;
