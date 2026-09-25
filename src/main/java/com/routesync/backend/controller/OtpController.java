@@ -98,6 +98,8 @@ public class OtpController {
             @Valid @RequestBody VerifyEmailOtpRequest request
     ) {
 
+        System.out.println("Body:========> "+ request);
+
         AuthResponse response =
                 otpService.verifyEmailOtp(
                         request.getEmail(),
