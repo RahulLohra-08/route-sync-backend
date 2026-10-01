@@ -59,8 +59,11 @@ public class SecurityConfig {
                          * Authentication endpoints public.
                          */
                         .requestMatchers(
-                                "/api/v1/auth/**", "/public/**"
+                                "/api/v1/auth/**", "/public/**",
+                                "/ws",
+                                "/ws/**"
                         ).permitAll()
+
 
                         /*
                          * ADMIN ONLY

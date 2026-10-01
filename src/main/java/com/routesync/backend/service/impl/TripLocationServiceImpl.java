@@ -1,5 +1,7 @@
 package com.routesync.backend.service.impl;
 
+import com.routesync.backend.websocket.TripLocationWebSocketMessage;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import com.routesync.backend.dto.trip.location.TripLocationResponse;
 import com.routesync.backend.dto.trip.location.UpdateTripLocationRequest;
 import com.routesync.backend.entity.Driver;
@@ -28,6 +30,7 @@ public class TripLocationServiceImpl implements TripLocationService {
     private final TripLocationRepository tripLocationRepository;
     private final TripRepository tripRepository;
     private final DriverRepository driverRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
 
     // =========================================================
@@ -129,6 +132,26 @@ public class TripLocationServiceImpl implements TripLocationService {
 
         tripRepository.save(trip);
 
+
+        TripLocationWebSocketMessage message =
+                new TripLocationWebSocketMessage(
+                        trip.getId(),
+                        trip.getBus().getId(),
+                        trip.getBus().getBusNumber(),
+                        trip.getRoute().getId(),
+                        trip.getRoute().getRouteCode(),
+                        savedLocation.getLatitude(),
+                        savedLocation.getLongitude(),
+                        savedLocation.getSpeed(),
+                        savedLocation.getHeading(),
+                        savedLocation.getAccuracy(),
+                        savedLocation.getRecordedAt()
+                );
+
+        messagingTemplate.convertAndSend(
+                "/topic/trips/" + trip.getId() + "/location",
+                message
+        );
 
         // -----------------------------------------------------
         // 8. Return response
