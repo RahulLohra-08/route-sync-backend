@@ -1,7 +1,8 @@
 package com.routesync.backend.service.impl;
 
 import com.routesync.backend.websocket.TripLocationWebSocketMessage;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.context.ApplicationEventPublisher;
+import com.routesync.backend.websocket.event.TripLocationUpdatedEvent;
 import com.routesync.backend.dto.trip.location.TripLocationResponse;
 import com.routesync.backend.dto.trip.location.UpdateTripLocationRequest;
 import com.routesync.backend.entity.Driver;
@@ -30,8 +31,7 @@ public class TripLocationServiceImpl implements TripLocationService {
     private final TripLocationRepository tripLocationRepository;
     private final TripRepository tripRepository;
     private final DriverRepository driverRepository;
-    private final SimpMessagingTemplate messagingTemplate;
-
+    private final ApplicationEventPublisher eventPublisher;
 
     // =========================================================
     // UPDATE CURRENT LOCATION
@@ -133,6 +133,9 @@ public class TripLocationServiceImpl implements TripLocationService {
         tripRepository.save(trip);
 
 
+        // =====================================================
+        // CREATE WEBSOCKET PAYLOAD
+        // =====================================================
         TripLocationWebSocketMessage message =
                 new TripLocationWebSocketMessage(
                         trip.getId(),
@@ -148,16 +151,29 @@ public class TripLocationServiceImpl implements TripLocationService {
                         savedLocation.getRecordedAt()
                 );
 
-        messagingTemplate.convertAndSend(
-                "/topic/trips/" + trip.getId() + "/location",
-                message
+        TripLocationResponse response = mapToResponse(savedLocation);
+
+        /*
+         * Henglish:
+         *
+         * Directly WebSocket send nahi kar rahe.
+         *
+         * Pehle current DB transaction complete hogi.
+         * AFTER_COMMIT listener actual broadcast karega.
+         */
+        eventPublisher.publishEvent(
+                new TripLocationUpdatedEvent(
+                        driverUserId,
+                        response,
+                        message
+                )
         );
 
         // -----------------------------------------------------
         // 8. Return response
         // -----------------------------------------------------
 
-        return mapToResponse(savedLocation);
+        return response;
     }
 
 
@@ -298,7 +314,6 @@ public TripLocationResponse getDriverLatestLocation(
                     )
             );
 }
-
 
     // =========================================================
     // GPS VALIDATION
