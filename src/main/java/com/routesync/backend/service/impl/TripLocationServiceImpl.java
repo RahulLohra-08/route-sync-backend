@@ -107,6 +107,9 @@ public class TripLocationServiceImpl implements TripLocationService {
         // 6. Create GPS history record
         // -----------------------------------------------------
 
+        // Henglish: Server par GPS update receive hone ka time save kar rahe hain.
+        LocalDateTime receivedAt = LocalDateTime.now();
+
         TripLocation location = TripLocation.builder()
                 .trip(trip)
                 .latitude(request.latitude())
@@ -114,12 +117,11 @@ public class TripLocationServiceImpl implements TripLocationService {
                 .speed(request.speed())
                 .heading(request.heading())
                 .accuracy(request.accuracy())
-                .recordedAt(LocalDateTime.now())
+                .recordedAt(receivedAt)
                 .build();
 
 
-        TripLocation savedLocation =
-                tripLocationRepository.save(location);
+        TripLocation savedLocation = tripLocationRepository.save(location);
 
 
         // -----------------------------------------------------
@@ -295,24 +297,15 @@ public TripLocationResponse getDriverLatestLocation(
         UUID driverUserId
 ) {
 
-    Trip trip = getDriverTrip(
-            tripId,
-            driverUserId
-    );
+    Trip trip = getDriverTrip(tripId,driverUserId);
 
+    // Henglish: Sirf latest GPS record database se fetch karo.
     return tripLocationRepository
-            .findAllByTripIdOrderByRecordedAtDesc(
-                    trip.getId()
-            )
-            .stream()
-            .findFirst()
+            .findFirstByTripIdOrderByRecordedAtDesc(trip.getId())
             .map(this::mapToResponse)
-            .orElseThrow(() ->
-                    new ResourceNotFoundException(
-                            "No GPS location found for trip: "
-                                    + tripId
-                    )
-            );
+            .orElseThrow(() -> new ResourceNotFoundException(
+                    "No GPS location found for trip: " + tripId
+            ));
 }
 
     // =========================================================
@@ -368,7 +361,6 @@ public TripLocationResponse getDriverLatestLocation(
             );
         }
     }
-
 
     // =========================================================
     // ENTITY → DTO

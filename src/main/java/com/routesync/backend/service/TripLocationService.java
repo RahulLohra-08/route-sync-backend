@@ -41,4 +41,5 @@ public interface TripLocationService {
             UUID tripId,
             UUID driverUserId
     );
+
 }

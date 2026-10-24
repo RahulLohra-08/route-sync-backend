@@ -97,11 +97,12 @@ public class TripLocation {
 
     @PrePersist
     protected void onCreate() {
+        LocalDateTime now = LocalDateTime.now();
 
         if (recordedAt == null) {
-            recordedAt = LocalDateTime.now();
+            recordedAt = now;
         }
 
-        createdAt = LocalDateTime.now();
+        createdAt = now;
     }
 }
