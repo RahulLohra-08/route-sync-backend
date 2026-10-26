@@ -1,5 +1,6 @@
 package com.routesync.backend.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,6 +17,7 @@ import java.util.Map;
  * Iska fayda:
  * Har controller mein baar-baar try-catch likhne ki zarurat nahi hai.
  */
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -109,8 +111,14 @@ public class GlobalExceptionHandler {
      * User ko internal error details nahi dikhayenge.
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGenericException(
-            Exception exception) {
+    public ResponseEntity<Map<String, Object>> handleGenericException(Exception exception) {
+
+        // Log complete exception details in IntelliJ console
+        log.error(
+                "Unexpected exception occurred: {}",
+                exception.getMessage(),
+                exception
+        );
 
         Map<String, Object> response = new LinkedHashMap<>();
 

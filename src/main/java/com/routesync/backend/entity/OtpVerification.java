@@ -16,6 +16,10 @@ import java.util.UUID;
                 @Index(
                         name = "idx_otp_phone_purpose",
                         columnList = "phone_number,purpose"
+                ),
+                @Index(
+                        name = "idx_otp_email_purpose",
+                        columnList = "email,purpose"
                 )
         }
 )
@@ -45,8 +49,12 @@ public class OtpVerification {
      *
      * Existing OTP records migrate hone tak nullable rakha gaya hai.
      */
-    @Column(name = "phone_number", nullable = false, length = 10)
+    @Column(name = "phone_number", nullable = true, length = 16)
     private String phoneNumber;
+
+    // NEW — required for Email OTP
+    @Column(name = "email", nullable = false, length = 255, unique = true)
+    private String email;
 
     /**
      * 6 digit OTP.

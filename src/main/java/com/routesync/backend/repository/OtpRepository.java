@@ -31,11 +31,20 @@ public interface OtpRepository extends JpaRepository<OtpVerification, UUID> {
     );
 
     /**
-     * Mobile number aur purpose ke basis par latest OTP find karega.
+     * Latest unused OTP find karega.
+     *
+     * Sirf un OTP records ko consider karega
+     * jinka verified status false hai.
      */
     Optional<OtpVerification>
-    findTopByPhoneNumberAndPurposeOrderByCreatedAtDesc(
+    findTopByPhoneNumberAndPurposeAndVerifiedFalseOrderByCreatedAtDesc(
             String phoneNumber,
+            OtpPurpose purpose
+    );
+
+    Optional<OtpVerification>
+    findTopByEmailAndPurposeAndVerifiedFalseOrderByCreatedAtDesc(
+            String email,
             OtpPurpose purpose
     );
 }
