@@ -103,7 +103,17 @@ public interface TripService {
             UUID driverUserId
     );
 
-//    Passenger Related service
+    /**
+     * Driver reports how many seats are currently taken on their own trip
+     * (BOARDING or IN_PROGRESS only; 0..totalSeats).
+     */
+    TripResponse updateOccupancyByDriver(
+            UUID tripId,
+            UUID driverUserId,
+            Integer currentOccupancy
+    );
+
+    //    Passenger Related service
     List<TripResponse> getAvailableTrips();
 
     List<TripResponse> getAvailableTripsByRoute(UUID routeId);

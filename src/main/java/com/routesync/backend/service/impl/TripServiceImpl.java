@@ -907,7 +907,54 @@ public class TripServiceImpl implements TripService {
         return mapToResponse(tripRepository.save(trip));
     }
 
-//    complete trip
+    //    update occupancy (driver)
+    @Override
+    public TripResponse updateOccupancyByDriver(
+            UUID tripId,
+            UUID driverUserId,
+            Integer currentOccupancy
+    ) {
+
+        Driver driver = driverRepository
+                .findByUserIdAndActiveTrue(driverUserId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Active driver profile not found for user id: "
+                                        + driverUserId
+                        )
+                );
+
+        Trip trip = tripRepository
+                .findByIdAndActiveTrue(tripId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Active trip not found with id: "
+                                        + tripId
+                        )
+                );
+
+        if (!trip.getDriver().getId().equals(driver.getId())) {
+            throw new BadRequestException(
+                    "This trip is not assigned to the current driver"
+            );
+        }
+
+        if (trip.getStatus() != TripStatus.IN_PROGRESS
+                && trip.getStatus() != TripStatus.BOARDING) {
+            throw new BadRequestException(
+                    "Occupancy can only be updated while the trip is BOARDING or IN_PROGRESS"
+            );
+        }
+
+        // Same rules as the admin update: 0 <= occupancy <= total seats.
+        validateOccupancy(currentOccupancy, trip.getTotalSeats());
+
+        trip.setCurrentOccupancy(currentOccupancy);
+
+        return mapToResponse(tripRepository.save(trip));
+    }
+
+    //    complete trip
     @Override
     public TripResponse completeTripByDriver(
             UUID tripId,

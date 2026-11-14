@@ -1,7 +1,9 @@
 package com.routesync.backend.controller.driver;
 
 import com.routesync.backend.dto.trip.TripResponse;
+import com.routesync.backend.dto.trip.UpdateOccupancyRequest;
 import com.routesync.backend.service.TripService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -106,6 +108,29 @@ public class DriverTripController {
                 tripService.cancelTripByDriver(
                         tripId,
                         userId
+                )
+        );
+    }
+
+    /**
+     * Driver reports current seat occupancy for their own trip.
+     * PATCH /api/v1/driver/trips/{tripId}/occupancy  { "currentOccupancy": 23 }
+     */
+    @PatchMapping("/{tripId}/occupancy")
+    public ResponseEntity<TripResponse> updateOccupancy(
+            @PathVariable UUID tripId,
+            @Valid @RequestBody UpdateOccupancyRequest request,
+            Authentication authentication
+    ) {
+        UUID userId = UUID.fromString(
+                authentication.getName()
+        );
+
+        return ResponseEntity.ok(
+                tripService.updateOccupancyByDriver(
+                        tripId,
+                        userId,
+                        request.currentOccupancy()
                 )
         );
     }

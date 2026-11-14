@@ -1,6 +1,7 @@
 package com.routesync.backend.config;
 
 import com.routesync.backend.security.websocket.StompAuthChannelInterceptor;
+import com.routesync.backend.security.websocket.StompSecurityContextInterceptor;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.annotation.Bean;
@@ -24,6 +25,7 @@ public class WebSocketConfig
         implements WebSocketMessageBrokerConfigurer {
 
     private final StompAuthChannelInterceptor stompAuthChannelInterceptor;
+    private final StompSecurityContextInterceptor stompSecurityContextInterceptor;
 
     @Override
     public void configureMessageBroker( MessageBrokerRegistry registry ) {
@@ -51,7 +53,12 @@ public class WebSocketConfig
          * Therefore CONNECT authentication happens before
          * other security authorization processing.
          */
-        registration.interceptors(stompAuthChannelInterceptor);
+        // Order matters: authenticate/authorize first, then expose the user to
+        // @PreAuthorize on the handler thread (see StompSecurityContextInterceptor).
+        registration.interceptors(
+                stompAuthChannelInterceptor,
+                stompSecurityContextInterceptor
+        );
     }
 
     @Override
