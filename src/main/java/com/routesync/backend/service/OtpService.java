@@ -1,8 +1,7 @@
 package com.routesync.backend.service;
 
+import com.routesync.backend.dto.auth.AuthResponse;
 import com.routesync.backend.entity.OtpPurpose;
-
-import java.time.LocalDateTime;
 
 /**
  * OTP related business logic ke liye service interface.
@@ -13,6 +12,19 @@ import java.time.LocalDateTime;
 public interface OtpService {
 
     /**
+     * User ke mobile number par OTP send karega.
+     * <p>
+     * Henglish:
+     * Twilio Verify OTP generate aur SMS delivery handle karega.
+     *
+     * @return
+     */
+    String sendOtp(
+            String phoneNumber,
+            OtpPurpose purpose
+    );
+
+    /**
      * Mobile number ke liye new OTP generate karega.
      *
      * New user ke case mein abhi user exist nahi bhi kar sakta.
@@ -21,10 +33,10 @@ public interface OtpService {
      * @param purpose OTP ka purpose
      * @return generated OTP
      */
-    String generateOtp(
-            String phoneNumber,
-            OtpPurpose purpose
-    );
+//    String generateOtp(
+//            String phoneNumber,
+//            OtpPurpose purpose
+//    );
 
     /**
      * Mobile number ke against OTP verify karega.
@@ -35,6 +47,23 @@ public interface OtpService {
      */
     void verifyOtp(
             String phoneNumber,
+            String otp,
+            OtpPurpose purpose
+    );
+
+    /**
+     * Email OTP.
+     */
+    void sendEmailOtp(
+            String email,
+            OtpPurpose purpose
+    );
+
+    /**
+     * Email OTP verification.
+     */
+    AuthResponse verifyEmailOtp(
+            String email,
             String otp,
             OtpPurpose purpose
     );

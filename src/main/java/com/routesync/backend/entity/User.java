@@ -138,12 +138,12 @@ public class User {
     @Builder.Default
     private UserRole role = UserRole.PASSENGER;
 
-
     /**
      * Account active hai ya nahi.
      *
      * Admin future mein kisi user ko deactivate kar sakta hai.
      */
+
     @Column(name = "is_active", nullable = false)
     @Builder.Default
     private Boolean active = true;
